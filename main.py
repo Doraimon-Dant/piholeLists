@@ -108,10 +108,11 @@ class piholeLists:
 			for dominio in tqdm(self.dominios.items()):
 				origen =str(dominio[1].get("origen"))
 				if origen is not None or origen!='':
-					if origen not in dominios_por_archivo_origen:
-						dominios_por_archivo_origen[origen]=[dominio[0]]
-					else:
-						dominios_por_archivo_origen[origen].append(dominio[0])
+					if origen ==file_name_:
+						if origen not in dominios_por_archivo_origen:
+							dominios_por_archivo_origen[origen]=[dominio[0]]
+						else:
+							dominios_por_archivo_origen[origen].append(dominio[0])
 
 			self.save_file(file_name_,dominios_por_archivo_origen[file_name_])
 				# dominios_por_archivo_origen
