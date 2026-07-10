@@ -40,22 +40,32 @@ class piholeLists:
 				if len(sublines)>1:
 					dominio=sublines[1].split('.')
 				
-				text =''
-				subtext=''
-				if(self.isTld('.'.join(dominio[-2:]))):
-					if len(dominio)>=3:
-						text= '.'.join(dominio[-3:])
-					else:
-						text= '.'.join(dominio[-2:])
-					subtext='.'.join(dominio[-3:-1])
-				else:	
-					text= '.'.join(dominio[-2:])
-					if text=='google.com' and len(dominio)>=3:
-						text= '.'.join(dominio[-3:])
+				(text,subtext) =self.evaluar_dominio(dominio)
 
 				self.addDominio(text,workingfile)
 				self.addDominio(subtext,workingfile)
+	def evaluar_dominio(self,dominio:list):
+		text =''
+		subtext=''
+		tld='.'.join(dominio[-2:])
+		dominios_especiales=['google.com','microsoft.com','microsoft.us']
+		if(self.isTld(tld)):
+			dominios_especiales=[f'google.{tld}',f'microsoft.{tld}',]
+			text= '.'.join(dominio[-3:])
+			if text in dominios_especiales :	
+				text= '.'.join(dominio[-4:])
+			else:
+				text= '.'.join(dominio[-2:])
+			subtext='.'.join(dominio[-3:-1])
+		else:	
+			text= '.'.join(dominio[-2:])
+			
+			if text in dominios_especiales and len(dominio)>=3:
+				text= '.'.join(dominio[-3:])
+		if subtext in dominios_especiales:
+			subtext=''
 
+		return (text,subtext)
 	def addDominio(self,dominio:str,workingfile:str):
 		if dominio is not None and dominio!='':
 			if dominio in self.dominios.keys():
@@ -102,19 +112,19 @@ class piholeLists:
 			# self.save_file(str(file_name),)
 		
 		# print(self.dominios)
-		for file_name in files_names:
-			file_name_=self.getlistname(str(file_name))
-			print(f"organizando archivo: {file_name_}")
-			for dominio in tqdm(self.dominios.items()):
-				origen =str(dominio[1].get("origen"))
-				if origen is not None or origen!='':
-					if origen ==file_name_:
-						if origen not in dominios_por_archivo_origen:
-							dominios_por_archivo_origen[origen]=[dominio[0]]
-						else:
-							dominios_por_archivo_origen[origen].append(dominio[0])
-
-			self.save_file(file_name_,dominios_por_archivo_origen[file_name_])
+		# for file_name in files_names:
+			# file_name_=self.getlistname(str(file_name))
+		print(f"organizando archivo..")
+		for dominio in tqdm(self.dominios.items()):
+			origen =str(dominio[1].get("origen"))
+			if origen is not None or origen!='':
+				if origen not in dominios_por_archivo_origen:
+					dominios_por_archivo_origen[origen]=[dominio[0]]
+				else:
+					dominios_por_archivo_origen[origen].append(dominio[0])
+		
+		for origen in dominios_por_archivo_origen:
+			self.save_file(origen,dominios_por_archivo_origen[origen])
 				# dominios_por_archivo_origen
 				# print(dominio)
 			# print(dominio)

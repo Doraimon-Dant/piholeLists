@@ -13,5 +13,9 @@
 0.0.0.0 ||54.254^
 0.0.0.0 ||nsat­c.net^
 0.0.0.0 ||llnw.net^
+0.0.0.0 ||spynet2.microsoft.com^
+0.0.0.0 ||spynetalt.microsoft.com^
+0.0.0.0 ||ipv6.microsoft.com^
 0.0.0.0 ||cortana.ai^
+0.0.0.0 ||ieonlinews.microsoft.com^
 0.0.0.0 ||windowsazure.com^

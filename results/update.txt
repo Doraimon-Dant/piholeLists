@@ -1,1 +1,5 @@
 0.0.0.0 ||windowsupdate.com^
+0.0.0.0 ||definitionupdates.microsoft.com^
+0.0.0.0 ||download.microsoft.com^
+0.0.0.0 ||update.microsoft.com^
+0.0.0.0 ||commerce.microsoft.com^
