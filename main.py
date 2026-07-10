@@ -31,11 +31,7 @@ class piholeLists:
 		print(f'Cargando dominios de {file}')
 		workingfile=self.get_file_route(file)
 		content =self.readlist(workingfile)
-		
-		
-		if self.getlistname(str(workingfile))=="nsfw.txt" or self.getlistname(str(workingfile))=="extense.txt":
-			workingfile=self.get_file_route('nsfw.txt')
-			
+
 		for line in tqdm(content.split('\n')):
 			if not line.startswith('#'):
 				sublines =line.split(' ')
@@ -79,10 +75,9 @@ class piholeLists:
 		
 		return text in self.tlds 
 
-	def save_file(self,fileName:str,content:dict,encoding:str='utf-8'):
+	def save_file(self,fileName:str,content:list,encoding:str='utf-8'):
 		save_route = self.get_save_route(f'{fileName}')
 		print(f'Guardando archivo {fileName} en. \n{save_route}')
-		print(self.get_save_route(f'{fileName}'))
 		with open(save_route,"w",encoding='utf-8') as file:
 				for dominio in tqdm(content):
 					file.write(f'{self.dominioRemplazo} ||{dominio}^\n')	
@@ -100,12 +95,27 @@ class piholeLists:
 		self.loadTLDS()
 		
 		files_names= self.load_lists()
+		dominios_por_archivo_origen:dict[str,list]={}
 
 		for file_name in tqdm(files_names):
 			self.load_domains(str(file_name))
+			# self.save_file(str(file_name),)
+		
 		# print(self.dominios)
-		for dominio in self.dominios.items():
-			print(dominio)
+		for file_name in files_names:
+			file_name_=self.getlistname(str(file_name))
+			print(f"organizando archivo: {file_name_}")
+			for dominio in tqdm(self.dominios.items()):
+				origen =str(dominio[1].get("origen"))
+				if origen is not None or origen!='':
+					if origen not in dominios_por_archivo_origen:
+						dominios_por_archivo_origen[origen]=[dominio[0]]
+					else:
+						dominios_por_archivo_origen[origen].append(dominio[0])
+
+			self.save_file(file_name_,dominios_por_archivo_origen[file_name_])
+				# dominios_por_archivo_origen
+				# print(dominio)
 			# print(dominio)
 		
 			# filename=
